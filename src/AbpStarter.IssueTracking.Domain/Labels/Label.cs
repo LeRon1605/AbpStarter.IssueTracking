@@ -10,4 +10,9 @@ public class Label: Entity<Guid>
     public string Text { get; set; }
     public string Color { get; set; }
     public ICollection<IssueLabel> Issues { get; set; }
+
+    public Label(Guid Id): base(Id)
+    {
+
+    }
 }

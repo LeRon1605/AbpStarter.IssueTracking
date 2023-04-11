@@ -11,4 +11,9 @@ public class User: Entity<Guid>
     public string Password { get; set; }
     public ICollection<Comment> Comments { get; set; }
     public ICollection<Issue> Issues { get; set; }
+
+    public User(Guid Id): base(Id)
+    {
+
+    }
 }
