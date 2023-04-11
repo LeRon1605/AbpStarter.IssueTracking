@@ -4,6 +4,7 @@ using AbpStarter.IssueTracking.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -12,9 +13,10 @@ using Volo.Abp.EntityFrameworkCore;
 namespace AbpStarter.IssueTracking.Migrations
 {
     [DbContext(typeof(IssueTrackingDbContext))]
-    partial class IssueTrackingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230411061854_init_issue_db")]
+    partial class init_issue_db
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

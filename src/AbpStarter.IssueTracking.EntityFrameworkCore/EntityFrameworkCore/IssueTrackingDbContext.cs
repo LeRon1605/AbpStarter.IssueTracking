@@ -1,4 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AbpStarter.IssueTracking.Buckets;
+using AbpStarter.IssueTracking.EntityConfiguration;
+using AbpStarter.IssueTracking.Issues;
+using AbpStarter.IssueTracking.Labels;
+using AbpStarter.IssueTracking.Users;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.Data;
@@ -23,7 +28,12 @@ public class IssueTrackingDbContext :
     IIdentityDbContext,
     ITenantManagementDbContext
 {
-    /* Add DbSet properties for your Aggregate Roots / Entities here. */
+    public DbSet<Bucket> Buckets { get; set; }
+    public DbSet<Comment> Comment { get; set; }
+    public DbSet<Issue> Issues { get; set; }
+    public DbSet<Label> Labels { get; set; }
+    public DbSet<IssueLabel> IssueLabels { get; set; }
+    public DbSet<User> AppUsers { get; set; }
 
     #region Entities from the modules
 
@@ -62,8 +72,6 @@ public class IssueTrackingDbContext :
     {
         base.OnModelCreating(builder);
 
-        /* Include modules to your migration db context */
-
         builder.ConfigurePermissionManagement();
         builder.ConfigureSettingManagement();
         builder.ConfigureBackgroundJobs();
@@ -72,14 +80,10 @@ public class IssueTrackingDbContext :
         builder.ConfigureOpenIddict();
         builder.ConfigureFeatureManagement();
         builder.ConfigureTenantManagement();
-
-        /* Configure your own tables/entities inside here */
-
-        //builder.Entity<YourEntity>(b =>
-        //{
-        //    b.ToTable(IssueTrackingConsts.DbTablePrefix + "YourEntities", IssueTrackingConsts.DbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
-        //});
+        builder.ConfigureUser();
+        builder.ConfigureIssue();
+        builder.ConfigureLabel();
+        builder.ConfigureBucket();
+        
     }
 }
