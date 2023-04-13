@@ -185,7 +185,8 @@ public class IssueTrackingWebModule : AbpModule
     {
         Configure<AbpAspNetCoreMvcOptions>(options =>
         {
-            options.ConventionalControllers.Create(typeof(IssueTrackingApplicationModule).Assembly);
+            //options.ConventionalControllers.Create(typeof(IssueTrackingApplicationModule).Assembly);
+            //options.
         });
     }
 

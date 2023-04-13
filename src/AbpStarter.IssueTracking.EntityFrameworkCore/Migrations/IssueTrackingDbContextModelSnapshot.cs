@@ -87,6 +87,13 @@ namespace AbpStarter.IssueTracking.Migrations
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
 
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid>("CreatorId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
@@ -109,6 +116,8 @@ namespace AbpStarter.IssueTracking.Migrations
                     b.HasIndex("AssignedUserId");
 
                     b.HasIndex("BucketId");
+
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("AbpIssues", (string)null);
                 });
@@ -146,30 +155,6 @@ namespace AbpStarter.IssueTracking.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AbpLabels", (string)null);
-                });
-
-            modelBuilder.Entity("AbpStarter.IssueTracking.Users.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)")
-                        .HasColumnName("Password");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("UserName");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserName");
-
-                    b.ToTable("AbpIssue_Users", (string)null);
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
@@ -1622,8 +1607,8 @@ namespace AbpStarter.IssueTracking.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AbpStarter.IssueTracking.Users.User", "User")
-                        .WithMany("Comments")
+                    b.HasOne("Volo.Abp.Identity.IdentityUser", "User")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1635,24 +1620,32 @@ namespace AbpStarter.IssueTracking.Migrations
 
             modelBuilder.Entity("AbpStarter.IssueTracking.Issues.Issue", b =>
                 {
-                    b.HasOne("AbpStarter.IssueTracking.Users.User", "AssignedUser")
-                        .WithMany("Issues")
+                    b.HasOne("Volo.Abp.Identity.IdentityUser", "AssignedUser")
+                        .WithMany()
                         .HasForeignKey("AssignedUserId");
 
                     b.HasOne("AbpStarter.IssueTracking.Buckets.Bucket", "Bucket")
                         .WithMany()
                         .HasForeignKey("BucketId");
 
+                    b.HasOne("Volo.Abp.Identity.IdentityUser", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("AssignedUser");
 
                     b.Navigation("Bucket");
+
+                    b.Navigation("CreatedBy");
                 });
 
             modelBuilder.Entity("AbpStarter.IssueTracking.Issues.IssueLabel", b =>
                 {
                     b.HasOne("AbpStarter.IssueTracking.Issues.Issue", "Issue")
                         .WithMany("Labels")
-                        .HasForeignKey("LabelId")
+                        .HasForeignKey("IssueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1818,13 +1811,6 @@ namespace AbpStarter.IssueTracking.Migrations
 
             modelBuilder.Entity("AbpStarter.IssueTracking.Labels.Label", b =>
                 {
-                    b.Navigation("Issues");
-                });
-
-            modelBuilder.Entity("AbpStarter.IssueTracking.Users.User", b =>
-                {
-                    b.Navigation("Comments");
-
                     b.Navigation("Issues");
                 });
 

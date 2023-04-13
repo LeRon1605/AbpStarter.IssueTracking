@@ -9,8 +9,13 @@ public class IssueTrackingPermissionDefinitionProvider : PermissionDefinitionPro
     public override void Define(IPermissionDefinitionContext context)
     {
         var myGroup = context.AddGroup(IssueTrackingPermissions.GroupName);
-        //Define your own permissions here. Example:
-        //myGroup.AddPermission(IssueTrackingPermissions.MyPermission1, L("Permission:MyPermission1"));
+
+        var issuePermission = myGroup.AddPermission(IssuePermissions.GroupName);
+
+        issuePermission.AddChild(IssuePermissions.Read);
+        issuePermission.AddChild(IssuePermissions.Create);
+        issuePermission.AddChild(IssuePermissions.Update);
+        issuePermission.AddChild(IssuePermissions.Delete);
     }
 
     private static LocalizableString L(string name)

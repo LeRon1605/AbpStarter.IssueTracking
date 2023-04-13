@@ -28,13 +28,21 @@ public static class IssueModelBuilderExtensions
                   .IsRequired(false);
             entity.Property(x => x.RepositoryId)
                   .IsRequired();
+            entity.Property(x => x.CreatorId)
+                  .IsRequired();
 
             entity.HasMany(x => x.Comments)
                   .WithOne(x => x.Issue)
                   .HasForeignKey(x => x.IssueId);
             entity.HasMany(x => x.Labels)
                   .WithOne(x => x.Issue)
-                  .HasForeignKey(x => x.LabelId);
+                  .HasForeignKey(x => x.IssueId);
+            entity.HasOne(x => x.CreatedBy)
+                  .WithMany()
+                  .HasForeignKey(x => x.CreatorId);
+            entity.HasOne(x => x.AssignedUser)
+                  .WithMany()
+                  .HasForeignKey(X => X.AssignedUserId);
         });
 
         builder.Entity<Comment>(entity =>
@@ -46,6 +54,9 @@ public static class IssueModelBuilderExtensions
             entity.Property(x => x.Text)
                   .HasMaxLength(255)
                   .IsRequired();
+            entity.HasOne(x => x.User)
+                  .WithMany()
+                  .HasForeignKey(x => x.UserId);
         });
 
         builder.Entity<IssueLabel>(entity =>

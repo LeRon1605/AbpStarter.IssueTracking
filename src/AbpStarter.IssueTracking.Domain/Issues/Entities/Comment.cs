@@ -1,6 +1,6 @@
-﻿using AbpStarter.IssueTracking.Users;
-using System;
+﻿using System;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Identity;
 
 namespace AbpStarter.IssueTracking.Issues;
 
@@ -11,5 +11,5 @@ public class Comment: Entity<Guid>
     public Guid IssueId { get; set; }
     public Guid UserId { get; set;  }
     public Issue Issue { get; set; }
-    public User User { get; set; }
+    public IdentityUser User { get; set; }
 }

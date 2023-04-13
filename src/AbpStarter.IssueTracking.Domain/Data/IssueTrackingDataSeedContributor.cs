@@ -1,7 +1,6 @@
 ﻿using AbpStarter.IssueTracking.Buckets;
 using AbpStarter.IssueTracking.Issues;
 using AbpStarter.IssueTracking.Labels;
-using AbpStarter.IssueTracking.Users;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
@@ -13,21 +12,18 @@ namespace AbpStarter.IssueTracking.Data;
 
 public class IssueTrackingDataSeedContributor : IDataSeedContributor, ITransientDependency
 {
-    private readonly IRepository<User, Guid> _userRepository;
     private readonly IRepository<Bucket, Guid> _bucketRepository;
     private readonly IRepository<Issue, Guid> _issueRepository;
     private readonly IRepository<Label, Guid> _labelRepository;
     private readonly IGuidGenerator _guidGenerator;
 
     public IssueTrackingDataSeedContributor(
-        IRepository<User, Guid> userRepository, 
         IRepository<Bucket, Guid> bucketRepository,
         IRepository<Issue, Guid> issueRepository, 
         IRepository<Label, Guid> labelRepository, 
         IGuidGenerator guidGenerator
     )
     {
-        _userRepository = userRepository;
         _bucketRepository = bucketRepository;
         _issueRepository = issueRepository;
         _labelRepository = labelRepository;
@@ -36,11 +32,6 @@ public class IssueTrackingDataSeedContributor : IDataSeedContributor, ITransient
 
     public async Task SeedAsync(DataSeedContext context)
     {
-        if (await _userRepository.GetCountAsync() <= 0)
-        {
-            await SeedUserAsync();
-        }    
-
         if (await _bucketRepository.GetCountAsync() <= 0)
         {
             await SeedBucketAsync();
@@ -54,13 +45,7 @@ public class IssueTrackingDataSeedContributor : IDataSeedContributor, ITransient
 
     private async Task SeedUserAsync()
     {
-        var users = new User[]
-        {
-            new(_guidGenerator.Create()) { UserName = "User_01", Password = "Password_01"  },
-            new(_guidGenerator.Create()) { UserName = "User_02", Password = "Password_02"  },
-        };
 
-        await _userRepository.InsertManyAsync(users);
     }
 
     private async Task SeedBucketAsync()

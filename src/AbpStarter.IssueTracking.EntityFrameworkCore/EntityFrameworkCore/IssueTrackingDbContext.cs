@@ -2,7 +2,6 @@
 using AbpStarter.IssueTracking.EntityConfiguration;
 using AbpStarter.IssueTracking.Issues;
 using AbpStarter.IssueTracking.Labels;
-using AbpStarter.IssueTracking.Users;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
@@ -33,7 +32,6 @@ public class IssueTrackingDbContext :
     public DbSet<Issue> Issues { get; set; }
     public DbSet<Label> Labels { get; set; }
     public DbSet<IssueLabel> IssueLabels { get; set; }
-    public DbSet<User> AppUsers { get; set; }
 
     #region Entities from the modules
 
@@ -47,8 +45,6 @@ public class IssueTrackingDbContext :
      * More info: Replacing a DbContext of a module ensures that the related module
      * uses this DbContext on runtime. Otherwise, it will use its own DbContext class.
      */
-
-    //Identity
     public DbSet<IdentityUser> Users { get; set; }
     public DbSet<IdentityRole> Roles { get; set; }
     public DbSet<IdentityClaimType> ClaimTypes { get; set; }
@@ -80,10 +76,8 @@ public class IssueTrackingDbContext :
         builder.ConfigureOpenIddict();
         builder.ConfigureFeatureManagement();
         builder.ConfigureTenantManagement();
-        builder.ConfigureUser();
         builder.ConfigureIssue();
         builder.ConfigureLabel();
         builder.ConfigureBucket();
-        
     }
 }
